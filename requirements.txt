@@ -7,5 +7,4 @@ gunicorn
 easyocr
 pillow
 numpy
-opencv-python-headless
 
