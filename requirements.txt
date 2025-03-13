@@ -1,7 +1,11 @@
 flask
 gradio
+requests
+fastapi
+uvicorn
+gunicorn
 easyocr
 pillow
-requests
-gunicorn
+numpy
+opencv-python-headless
 
