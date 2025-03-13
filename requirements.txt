@@ -2,9 +2,7 @@ flask
 gradio
 requests
 fastapi
-uvicorn
 gunicorn
-easyocr
 pillow
 numpy
 
