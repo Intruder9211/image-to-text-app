@@ -6,4 +6,8 @@ gunicorn
 pillow
 numpy
 easyocr
+transformers
+torch
+streamlit
+
 
