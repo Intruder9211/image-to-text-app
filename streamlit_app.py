@@ -3,24 +3,20 @@ from PIL import Image
 import torch
 from transformers import BlipProcessor, BlipForConditionalGeneration
 
-# Set page config
 st.set_page_config(page_title="Image to Caption", layout="centered")
 
-# Load processor and model
 @st.cache_resource
 def load_model():
     processor = BlipProcessor.from_pretrained("Salesforce/blip-image-captioning-base")
     model = BlipForConditionalGeneration.from_pretrained("Salesforce/blip-image-captioning-base")
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model.to(device)
-    return processor, model, device
+    return processor, model
 
-processor, model, device = load_model()
+processor, model = load_model()
+device = torch.device("cpu")  # force CPU to avoid GPU transfer error
+model.to(device)
 
-# Title
 st.title("🖼️ Image to Text Generator using BLIP")
 
-# File uploader
 uploaded_file = st.file_uploader("Upload an image...", type=["jpg", "jpeg", "png"])
 
 if uploaded_file is not None:
@@ -29,10 +25,7 @@ if uploaded_file is not None:
 
     if st.button("Generate Caption"):
         with st.spinner("Generating..."):
-            # Process and move to device
             inputs = processor(images=image, return_tensors="pt").to(device)
-
-            # Generate caption
             output = model.generate(**inputs, do_sample=True, top_p=0.9, max_length=50)
             caption = processor.tokenizer.decode(output[0], skip_special_tokens=True)
 
