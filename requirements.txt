@@ -1,13 +1,9 @@
-flask
-gradio
-requests
-fastapi
-gunicorn
 pillow
 numpy
 easyocr
 transformers
 torch
 streamlit
+
 
 
