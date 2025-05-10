@@ -1,26 +1,15 @@
 import streamlit as st
+import easyocr
 from PIL import Image
-import torch
-from transformers import BlipProcessor, BlipForConditionalGeneration
 
-# Load Model
-processor = BlipProcessor.from_pretrained("Salesforce/blip-image-captioning-base")
-model = BlipForConditionalGeneration.from_pretrained("Salesforce/blip-image-captioning-base")
+reader = easyocr.Reader(['en'])
 
-st.title("🖼️ Image Captioning App")
+st.title("Image to Text Converter")
+uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "png", "jpeg"])
 
-# Upload Image
-uploaded_file = st.file_uploader("Upload an Image", type=["jpg", "png", "jpeg"])
 if uploaded_file is not None:
-    image = Image.open(uploaded_file).convert("RGB")
+    image = Image.open(uploaded_file)
     st.image(image, caption="Uploaded Image", use_column_width=True)
 
-    # Process Image
-    inputs = processor(image, return_tensors="pt")
-
-    # Generate Caption with Nucleus Sampling
-    output = model.generate(**inputs, do_sample=True, top_p=0.9, max_length=50)
-    caption = processor.decode(output[0], skip_special_tokens=True)
-
-    st.subheader("Generated Caption:")
-    st.write(f"**{caption}**")
+    text = reader.readtext(uploaded_file, detail=0)
+    st.write("Extracted Text:", " ".join(text))
